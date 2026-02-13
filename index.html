@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una Pregunta Importante ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:black;
+    color:white;
+    overflow:hidden;
+}
+
+/* Fondo */
+.fondo{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:url("imagen.jpg") center/cover no-repeat;
+    filter: blur(1px) brightness(50%);
+    z-index:-1;
+}
+
+/* Pantalla principal */
+.main{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+h1{
+    font-size:50px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-bottom:40px;
+}
+h2{
+    font-size:20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-bottom:40px;
+}
+.botones{
+    display:flex;
+    gap:30px;
+}
+
+button{
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#si{
+    background:#e50914;
+    color:white;
+    padding:15px 40px;
+    font-size:22px;
+}
+
+#no{
+    background:gray;
+    color:white;
+    padding:8px 20px;
+    font-size:14px;
+}
+
+.mensaje{
+    margin-top:25px;
+    font-size:20px;
+    color:#ffb3b3;
+}
+
+/* Overlay */
+.overlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+/* Sobre */
+.sobre{
+    width:320px;
+    height:220px;
+    background:#f5f5f5;
+    position:relative;
+    cursor:pointer;
+    animation: aparecer 0.8s ease forwards;
+}
+
+@keyframes aparecer{
+    from{transform:scale(0); opacity:0;}
+    to{transform:scale(1); opacity:1;}
+}
+
+.tapa{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:#e50914;
+    clip-path: polygon(0 0, 50% 60%, 100% 0);
+    transform-origin:top;
+    transition:1s;
+}
+
+.abierto .tapa{
+    transform: rotateX(180deg);
+}
+
+/* Carta grande */
+.carta-grande{
+    display:none;
+    background:white;
+    color:black;
+    width:80%;
+    max-width:900px;
+    height:80vh;
+    padding:50px;
+    border-radius:10px;
+    overflow-y:auto;
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+    animation: expandir 0.8s ease forwards;
+}
+
+@keyframes expandir{
+    from{transform:scale(0.7); opacity:0;}
+    to{transform:scale(1); opacity:1;}
+}
+
+.carta-grande h2{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:32px;
+}
+
+.carta-grande p{
+    font-size:20px;
+    line-height:1.6;
+    white-space:pre-line;
+    
+}
+
+/* Corazones */
+.heart{
+    position:fixed;
+    color:#e50914;
+    font-size:20px;
+    animation: floatUp 5s linear infinite;
+}
+
+@keyframes floatUp{
+    0%{ transform: translateY(0); opacity:1;}
+    100%{ transform: translateY(-100vh); opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="fondo"></div>
+
+<div class="main" id="main">
+    <h1>¿Quieres ser mi San Valentín? ❤️</h1>
+
+    <div class="botones">
+        <button id="si" onclick="aceptar()">PUES CLAROO ❤️</button>
+        <button id="no" onclick="negar()">No, feo</button>
+    </div>
+
+    <div class="mensaje" id="mensaje"></div>
+</div>
+
+<div class="overlay" id="overlay">
+
+    <div class="sobre" id="sobre" onclick="abrirCarta()">
+        <div class="tapa"></div>
+    </div>
+
+    <div class="carta-grande" id="cartaGrande">
+        <h2>Para mi mocosina ❤️</h2>
+        <p id="textoCarta"></p>
+    </div>
+
+</div>
+
+<!-- 🎵 Música -->
+<audio id="musica" loop>
+    <!-- Puedes cambiar esta URL por vuestra canción -->
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let contadorNo = 0;
+
+function negar(){
+    const mensaje = document.getElementById("mensaje");
+    const botonSi = document.getElementById("si");
+    const botonNo = document.getElementById("no");
+
+    contadorNo++;
+
+    const frases = [
+        "Aaaaay que no me quiere 😢",
+        "¿Estás segura? 🥺",
+        "Oye, que era broma ❤️",
+        "Qué mala macho",
+        "Vengaaaa, dale ya al SÍ"
+    ];
+
+    mensaje.textContent = frases[Math.min(contadorNo-1, frases.length-1)];
+
+    botonSi.style.fontSize = (40 + contadorNo*5) + "px";
+    botonNo.style.fontSize = (10 - contadorNo*2) + "px";
+}
+
+function aceptar(){
+    document.getElementById("main").style.display="none";
+    document.getElementById("overlay").style.display="flex";
+    lanzarCorazones();
+}
+
+function abrirCarta(){
+    const sobre = document.getElementById("sobre");
+    sobre.classList.add("abierto");
+
+    setTimeout(()=>{
+        sobre.style.display="none";
+        const carta = document.getElementById("cartaGrande");
+        carta.style.display="block";
+
+        document.getElementById("musica").play(); // 🎵 empieza la música
+
+        escribirMensaje();
+    },1000);
+}
+
+function escribirMensaje(){
+    const texto = `Bueno, otra vez te escribo una carta y aunque esta vez te va a costar más guardarla en tu habitación la podrás llevas a donde quieras.
+
+Ya más de dos años juntos, y nuestro tercer San Valentín. Me acuerdo mucho de los dos anteriores, cada uno tiene algo especial y seguro que este también nos deja recuerdos muy bonitos para recordar. Aún así, es algo distinto, porque hemos madurado mucho más como pareja en el tiempo que llevamos. Me gusta mucho tenerte a mi lado, que seas mi compañera, mi amiga y mi novia, ayudándonos el uno al otro.
+
+Aunque haya pasado el tiempo, te sigo queriendo más que nunca, y no me imagino un futuro sin ti. Estos meses he sentido mucho como hemos crecido como pareja y poco a poco hemos arreglado nuestros fallos. Creo que estamos en un punto muy bueno de la relación, y aunque este mes he estado más agobiado, he sentido mucho como me apoyabas y te esforzabas en todo lo que pudieses por mi. Gracias a eso he podido llevarlo mucho mejor, muchas gracias.
+
+Eres una gran novia, te preocupas por mi (a veces igual un poco de más), me cuidas y me quieres muchísimo. Por eso yo siempre voy a devolverte lo mismo... bueno, un poco más yo jojojojojo.
+
+Estoy seguro que con el tiempo seguiremos creciendo, juntos, y cada vez nos querremos más. Te amo con locura, eres el amor de mi vida y la persona con la que quiero compartir mis metas y las tuyas.
+
+Por muchos más años juntos y por muchos más años mejores. 
+
+Te amo ❤️❤️`;
+
+    const contenedor = document.getElementById("textoCarta");
+    let i = 0;
+
+    function escribir(){
+        if(i < texto.length){
+            contenedor.textContent += texto.charAt(i);
+            i++;
+            setTimeout(escribir, 20);
+        }
+    }
+
+    escribir();
+}
+
+function lanzarCorazones(){
+    setInterval(()=>{
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML="❤";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=(Math.random()*25+15)+"px";
+        document.body.appendChild(heart);
+
+        setTimeout(()=>{ heart.remove(); },5000);
+
+    },300);
+}
+
+</script>
+
+</body>
+</html>
